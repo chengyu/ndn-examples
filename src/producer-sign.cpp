@@ -43,42 +43,6 @@ public:
   }
 
 private:
-  //void
-  //HexPrinter(const Block& block, const std::string& indent = "")
-  //{
-  //  std::cout << indent;
-  //  for (Buffer::const_iterator i = block.begin (); i != block.value_begin(); ++i)
-  //    {
-  //      std::cout << "0x";
-  //      std::cout << std::noshowbase << std::hex << std::setw(2) <<
-  //        std::setfill('0') << static_cast<int>(*i);
-  //      std::cout << ", ";
-  //    }
-  //  std::cout << "\n";
-  //
-  //  if (block.elements_size() == 0 && block.value_size() > 0)
-  //    {
-  //      std::cout << indent << "    ";
-  //      for (Buffer::const_iterator i = block.value_begin (); i != block.value_end(); ++i)
-  //        {
-  //          std::cout << "0x";
-  //          std::cout << std::noshowbase << std::hex << std::setw(2) <<
-  //            std::setfill('0') << static_cast<int>(*i);
-  //          std::cout << ", ";
-  //        }
-  //      std::cout << "\n";
-  //    }
-  //  else
-  //    {
-  //      for (Block::element_const_iterator i = block.elements_begin();
-  //           i != block.elements_end();
-  //           ++i)
-  //        {
-  //          HexPrinter(*i, indent+"    ");
-  //        }
-  //    }
-  //}
-
   void
   onInterest(const InterestFilter& filter, const Interest& interest)
   {
@@ -98,32 +62,10 @@ private:
     data->setFreshnessPeriod(time::seconds(10));
     data->setContent(reinterpret_cast<const uint8_t*>(content.c_str()), content.size());
 
-    // Sign Data packet with default identity
-    // m_keyChain.sign(*data);
     Name producerId("/root/site1"); ///test/site2/user2
     m_keyChain.signByIdentity(*data, producerId);
     // m_keyChain.sign(data, <identityName>);
     // m_keyChain.sign(data, <certificate>);
-
-    // Return Data packet to the requester
-    //std::cout << ">> D: " << *data << std::endl;
-    //std::cout << "keyLocator : " << data->getSignature().getKeyLocator().getName() << std::endl;
-    //Name defaultKeyName = m_keyChain.getDefaultKeyNameForIdentity(producerId);
-    //std::cout << "key Name : " << defaultKeyName << std::endl;
-
-    //shared_ptr<PublicKey> defaultPKey = m_keyChain.getPublicKey(defaultKeyName);
-
-    ////verify the signature
-    //if (ndn::Validator::verifySignature(*data, data->getSignature(), *defaultPKey)) {
-    //  std::cout << "signature OK; " << std::endl;
-    //  //std::cout << "Key " << std::endl;
-    //  //std::cout << *defaultPKey<< std::endl;
-    //  //std::cout << "Signature " << std::endl;
-    //  //HexPrinter(data->getSignature().getValue());
-    //}
-    //else
-    //  std::cout << "signature verification failed" << std::endl;
-
 
     m_face.put(*data);
   }

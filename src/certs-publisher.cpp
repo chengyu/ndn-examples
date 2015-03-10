@@ -50,15 +50,9 @@ private:
   {
     std::cout << "<< I: " << interest << std::endl;
 
-    // Create new name, based on Interest's name
-    //Name dataName(interest.getName());
-    //shared_ptr<Data> data = make_shared<Data>();
-    //data->setName(dataName);
-    //data->setFreshnessPeriod(time::seconds(10));
     Name tmp("/root/KEY/site1/ksk-1425351755998/ID-CERT/%FD%00%00%01K%DD%9B%29%BE");
     std::cout << "sending out KEY data : " << tmp << std::endl;
     shared_ptr<IdentityCertificate> site1Cert = m_keyChain.getCertificate(tmp);
-    //data->wireEncode(*rootCert);
 
     m_face.put(*site1Cert);
   }

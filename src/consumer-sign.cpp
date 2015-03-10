@@ -43,7 +43,6 @@ public:
                                                                                "^([^<KEY>]*)<KEY>(<>*)<ksk-.*><ID-CERT>$",
                                                                                ">", "\\1", "\\1\\2", true));
 
-    //ndn::shared_ptr<ndn::IdentityCertificate> anchor = ndn::io::load<ndn::IdentityCertificate>("/Users/chengyu/Dropbox/cert/site1-verify-test.cert");
     ndn::shared_ptr<ndn::IdentityCertificate> anchor = ndn::io::load<ndn::IdentityCertificate>("/Users/chengyu/Dropbox/cert/root.ndncert");
 
     if (static_cast<bool>(anchor))
@@ -51,11 +50,8 @@ public:
         BOOST_ASSERT(anchor->getName().size() >= 1);
 
         m_validator->addTrustAnchor(anchor);
-        //std::cout << "valid certificate" << std::endl;
       }
     else {
-      //std::cout << "invalid certificate" << std::endl;
-      //return;
       throw "invalid certificate";
     }
   }
@@ -96,9 +92,6 @@ private:
   void
   onData(const Interest& interest, const Data& data)
   {
-    //shared_ptr<Data> recData = make_shared<Data>(data);
-    //std::cout << "locator : " << data.getSignature().getKeyLocator().getName() << std::endl;
-
     m_validator->validate(data, bind(&Consumer::displayData, this, _1),
                           bind(&Consumer::onDataValidationFailed, this, _1, _2));
   }
