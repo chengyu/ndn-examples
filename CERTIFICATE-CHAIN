@@ -1,0 +1,29 @@
+
+Steps to start a certificate chain from scratch
+===============================================
+
+The example uses one trust root, and two site keys
+
+1. generate root key
+   root> ndnsec-keygen /root | tee root.ndncert | ndnsec-cert-install -
+
+2. generate site keys, and certificates
+   site1> ndnsec-keygen /root/site1 > site1.req
+   (copy site1.req to root machine)
+   root> ndnsec-certgen -N /root/site1 -s /root site1.req > site1.ndncert
+   (copy site1.ndncert to site1 machine)
+   site1> cat site1.ndncert | ndnsec-cert-install -
+
+   (similar for site2)
+
+3. generate routers' keys (NLSR example, could be users)
+   router1> ndnsec-keygen /root/site1/router1 > router1.req
+   (copy router1.req to site1 machine)
+   site1> ndnsec-certgen -N /root/site1/router1 -s /root/site1 router1.req > router1.ndncert
+   (copy router1.ndncert to router1 machine)
+   router1> cat router1.ndncert | ndnsec-cert-install -
+
+   (similar for router2)
+
+4. repo-ng or ndns as platform for key storage, can be replaced by a simple app (publishing keys)
+   (copy *.ndncert to some connected machine on the network, and publish them from repo-ng or ndns)
