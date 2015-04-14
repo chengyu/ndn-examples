@@ -1,6 +1,6 @@
 # -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 VERSION='0.1'
-APPNAME='ndn-validator-examples'
+APPNAME='ndn-tool-set'
 
 from waflib import Configure, Utils, Logs, Context
 import os
