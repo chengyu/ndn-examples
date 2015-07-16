@@ -25,6 +25,8 @@
 #include <ndn-cxx/util/io.hpp>
 #include <boost/assert.hpp>
 
+#include <boost/asio.hpp>
+
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
 // Additional nested namespace could be used to prevent/limit name contentions
@@ -87,6 +89,7 @@ private:
     std::string message(reinterpret_cast<const char*>(data->getContent().value()),
                         data->getContent().value_size());
     std::cout << "msg: " << message << std::endl;
+    m_face->getIoService().stop();
   }
 
   void
