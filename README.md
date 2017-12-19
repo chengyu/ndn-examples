@@ -1,11 +1,13 @@
-Compile and install:
+1 Compile and install:
+=====================
 
   ./waf configure
   ./waf
   ./waf install
 
 
-Tools for loading data into ndn-repo-ng
+2. Tools for loading data into ndn-repo-ng
+==========================================
 
   writeNdnFile reads raw data and generates tlv file as output.
 
@@ -14,7 +16,8 @@ Tools for loading data into ndn-repo-ng
   tlvFilesLoader.py reads the tlv files in a folder and inject them into the ndn-repo-ng
 
 
-Steps:
+3. Usage:
+=========
 
   1. start repo-ng
 
