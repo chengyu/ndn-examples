@@ -20,7 +20,6 @@
 #include <ndn-cxx/face.hpp>
 #include <ndn-cxx/security/key-chain.hpp>
 #include <ndn-cxx/util/scheduler.hpp>
-#include <ndn-cxx/util/command-interest-generator.hpp>
 #include <fstream>
 #include <string>
 #include <stdlib.h>
@@ -60,7 +59,6 @@ public:
 
   NdnPutFile()
     : isUnversioned(false)
-    , useDigestSha256(false)
     , freshnessPeriod(DEFAULT_FRESHNESS_PERIOD)
     , interestLifetime(DEFAULT_INTEREST_LIFETIME)
     , blockSize(1000)
@@ -88,7 +86,6 @@ private:
 
 public:
   bool isUnversioned;
-  bool useDigestSha256;
   std::string identityForData;
   std::string identityForCommand;
   milliseconds freshnessPeriod;
@@ -103,7 +100,6 @@ public:
 
 private:
   ndn::KeyChain m_keyChain;
-  ndn::CommandInterestGenerator m_generator;
   uint64_t m_timestampVersion;
   milliseconds m_checkPeriod;
   size_t m_currentSegmentNo;
@@ -156,18 +152,7 @@ NdnPutFile::run()
 void
 NdnPutFile::signData(ndn::Data& data)
 {
-  if (useDigestSha256) {
-    m_keyChain.signWithSha256(data);
-  }
-  else {
-    if (identityForData.empty())
-      m_keyChain.sign(data);
-    else {
-      ndn::Name keyName = m_keyChain.getDefaultKeyNameForIdentity(ndn::Name(identityForData));
-      ndn::Name certName = m_keyChain.getDefaultCertificateNameForKey(keyName);
-      m_keyChain.sign(data, certName);
-    }
-  }
+  m_keyChain.sign(data);
 }
 
 
@@ -175,14 +160,11 @@ static void
 usage()
 {
   fprintf(stderr,
-          "ndnputfile [-u] [-D] [-d] [-i identity] [-I identity]"
+          "ndnputfile [-u] [-d]"
           "  [-x freshness] [-l lifetime] [-w timeout] ndn-name infilename outfilename\n"
           "\n"
           " Write a file into a repo.\n"
           "  -u: unversioned: do not add a version component\n"
-          "  -D: use DigestSha256 signing method instead of SignatureSha256WithRsa\n"
-          "  -i: specify identity used for signing Data\n"
-          "  -I: specify identity used for signing commands\n"
           "  -x: FreshnessPeriod in milliseconds\n"
           "  -l: InterestLifetime in milliseconds for each command\n"
           "  -w: timeout in milliseconds for whole process (default unlimited)\n"
@@ -205,15 +187,6 @@ main(int argc, char** argv)
     switch (opt) {
     case 'u':
       ndnPutFile.isUnversioned = true;
-      break;
-    case 'D':
-      ndnPutFile.useDigestSha256 = true;
-      break;
-    case 'i':
-      ndnPutFile.identityForData = std::string(optarg);
-      break;
-    case 'I':
-      ndnPutFile.identityForCommand = std::string(optarg);
       break;
     case 'x':
       try {
