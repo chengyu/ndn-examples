@@ -1,13 +1,12 @@
-1 Compile and install:
-=====================
+#1 Compile and install:
 
-  ./waf configure
-  ./waf
-  ./waf install
+```
+  > ./waf configure
+  > ./waf
+  > ./waf install
+```
 
-
-2. Tools for loading data into ndn-repo-ng
-==========================================
+#2. Tools for loading data into ndn-repo-ng
 
   writeNdnFile reads raw data and generates tlv file as output.
 
@@ -16,22 +15,25 @@
   tlvFilesLoader.py reads the tlv files in a folder and inject them into the ndn-repo-ng
 
 
-3. Usage:
-=========
+#3. Usage:
 
-  1. start repo-ng
+##. start repo-ng
 
     A. Edit the repo-ng.conf (/usr/local/etc/ndn/repo-ng.conf), configure the prefix for data;
     B. Uncomment out the tcp_bulk_insert; 
 
-  2. Generate tlv files
+##. Generate tlv files
 
+```
     python tlvFilesBatchGen.py -f <list_for_file_and_names> -o <output_dir>
 
     example: python tlvFilesBatchGen.py -f test-mapping.txt -o output
+```
 
-  3. Load tlv files into repo-ng
+##. Load tlv files into repo-ng
 
+```
     python tlvFilesLoader.py -f <tlv_files_dir>
 
     example: python tlvFilesLoader.py -f output
+```
