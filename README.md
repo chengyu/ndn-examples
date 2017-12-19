@@ -1,13 +1,34 @@
-# ndn-validator-examples
+Compile and install:
 
-Tools for personal use.
+  ./waf configure
+  ./waf
+  ./waf install
 
-  This repository contains some examples for demonstrating how to use ndn validators.
-Two validators are used here: one is the validator-regex, the other is validator-config.
 
-  Basically the producer/consumer examples in the ndn-cxx library are modified here. The producer-sign
-publishes data by signing it using the key chain (CERTIFICATE-CHAIN shows how to create the certificate
- chain from scatch). consumer-sign utilizes validator-regex to verify the data, and the 
-consumer-sign-config uses validator-config. The certs-producer are providing the producer's certificate.
-Those examples can be improved in many ways, but here just some naive examples to teach new users on
-how to use ndn-cxx library validators.
+Tools for loading data into ndn-repo-ng
+
+  writeNdnFile reads raw data and generates tlv file as output.
+
+  tlvFilesBatchGen.py generates multiple tlv files for a given list of raw data files, the list should also contain the assigned NDN names (refer to scripts/test-mapping.txt for examples)
+
+  tlvFilesLoader.py reads the tlv files in a folder and inject them into the ndn-repo-ng
+
+
+Steps:
+
+  1. start repo-ng
+
+    A. Edit the repo-ng.conf (/usr/local/etc/ndn/repo-ng.conf), configure the prefix for data;
+    B. Uncomment out the tcp_bulk_insert; 
+
+  2. Generate tlv files
+
+    python tlvFilesBatchGen.py -f <list_for_file_and_names> -o <output_dir>
+
+    example: python tlvFilesBatchGen.py -f test-mapping.txt -o output
+
+  3. Load tlv files into repo-ng
+
+    python tlvFilesLoader.py -f <tlv_files_dir>
+
+    example: python tlvFilesLoader.py -f output

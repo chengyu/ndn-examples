@@ -1,0 +1,3 @@
+1MB.txt /1MB
+2MB.txt /2MB
+3MB.txt /3MB
